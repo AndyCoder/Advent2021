@@ -9,15 +9,20 @@ fn main() {
 
     let mut last: Option<u32> = Option::None;
     let mut count: u32 = 0;
-    for i in input.windows(3) {
-        match last {
-            None => last = Some(i.to_owned()),
-            Some(j) => {
-                if i > &j {
-                    count = count + 1
-                };
-                last = Some(i.to_owned())
-            }
+    for s in input.windows(3) {
+        match s {
+            &[a, b, c] => {
+                match last {
+                    None => last = Some(a + b + c),
+                    Some(j) => {
+                        if a + b + c > j {
+                            count = count + 1
+                        };
+                        last = Some(a + b + c)
+                    }
+                }
+            },
+            _ => continue
         }
     };
     println!("{}", count);
