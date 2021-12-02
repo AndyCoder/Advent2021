@@ -33,11 +33,15 @@ fn main() {
 
     let mut h_pos: isize = 0;
     let mut depth: isize = 0;
+    let mut aim: isize = 0;
     for (index, inst) in instructions.iter().enumerate() {
         match inst.op {
-            Operation::Forward => h_pos = h_pos + inst.arg,
-            Operation::Up => depth = depth - inst.arg,
-            Operation::Down => depth = depth + inst.arg,
+            Operation::Forward => {
+                h_pos = h_pos + inst.arg;
+                depth = depth + (aim * inst.arg)
+            },
+            Operation::Up => aim = aim - inst.arg,
+            Operation::Down => aim = aim + inst.arg,
             Operation::InvalidOp => println!("Invalid operation detected at line {}", index)
         }
     };
