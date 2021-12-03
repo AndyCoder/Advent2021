@@ -38,45 +38,15 @@ fn main() {
     
     println!("part 1: {} * {} = {}", gamma, epsilon, g * e);
 
-    let mut oxy_seq: String = gamma.chars().nth(0).unwrap().to_string();
-    let oxy_gen_rating: String;
-    loop {
-        let filtered_input: Vec<&String> = input.iter().filter(|x| match x.find(&oxy_seq) {
-            Some(0) => true,
-            _ => false,
-        }).collect();
-        let len: usize = filtered_input.len();
-        if len == 1 {
-            oxy_gen_rating = filtered_input.get(0).unwrap().to_string();
-            break;
-        } else {
-            if sum_at_pos(&filtered_input, oxy_seq.len()) > (len-1) / 2 {
-                oxy_seq.push('1')
-            } else {
-                oxy_seq.push('0')
-            }
-        }
-    };
+    let oxy_gen_rating: String = search(
+        &input,
+        gamma.chars().nth(0).unwrap().to_string(),
+        '1', '0');
 
-    let mut co2_seq: String = epsilon.chars().nth(0).unwrap().to_string();
-    let co2_scrub_rating: String;
-    loop {
-        let filtered_input: Vec<&String> = input.iter().filter(|x| match x.find(&co2_seq) {
-            Some(0) => true,
-            _ => false,
-        }).collect();
-        let len: usize = filtered_input.len();
-        if len == 1 {
-            co2_scrub_rating = filtered_input.get(0).unwrap().to_string();
-            break;
-        } else {
-            if sum_at_pos(&filtered_input, co2_seq.len()) > (len-1) / 2 {
-                co2_seq.push('0')
-            } else {
-                co2_seq.push('1')
-            }
-        }
-    };
+    let co2_scrub_rating: String = search(
+        &input,
+        epsilon.chars().nth(0).unwrap().to_string(),
+        '0', '1');
 
     let o: usize = usize::from_str_radix(&oxy_gen_rating, 2).unwrap();
     let c: usize = usize::from_str_radix(&co2_scrub_rating, 2).unwrap();
@@ -92,4 +62,27 @@ fn sum_at_pos(input: &Vec<&String>, pos: usize) -> usize {
         sum = sum + usize::from_str_radix(&line.chars().nth(pos).unwrap().to_string(), 2).unwrap()
     };
     sum
+}
+
+fn search(input: &Vec<String>, initial: String, over: char, under: char) -> String {
+    let mut seq: String = initial.to_owned();
+    let result: String;
+    loop {
+        let filtered_input: Vec<&String> = input.iter().filter(|x| match x.find(&seq) {
+            Some(0) => true,
+            _ => false,
+        }).collect();
+        let len: usize = filtered_input.len();
+        if len == 1 {
+            result = filtered_input.get(0).unwrap().to_string();
+            break;
+        } else {
+            if sum_at_pos(&filtered_input, seq.len()) > (len-1) / 2 {
+                seq.push(over)
+            } else {
+                seq.push(under)
+            }
+        }
+    }
+    result
 }
