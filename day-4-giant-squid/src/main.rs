@@ -1,5 +1,6 @@
 use std::fs;
 
+#[derive(Clone)]
 struct Board {
     spaces: [Space; 25],
 }
@@ -94,11 +95,19 @@ fn main() {
         .collect();
 
     for (turn, draw) in draws.iter().enumerate() {
-        for (n, board) in boards.iter_mut().enumerate() {
+        for board in boards.iter_mut() {
             board.mark(*draw);
-            if board.is_winner() {
-                println!("score = {}, draw = {}, turn = {}, board_index = {}", board.score(*draw), draw, turn, n);
-                std::process::exit(0)
+        }
+        let filtered_boards: Vec<&Board> = boards.iter().filter(|x| !x.is_winner()).collect();
+        println!("draw = {}, turn = {}, boards = {}", draw, turn, filtered_boards.len());
+        if filtered_boards.len() == 1 {
+            let mut final_board: Board = filtered_boards[0].clone();
+            for (n, draw) in draws.iter().skip(turn + 1).enumerate() {
+                final_board.mark(*draw);
+                if final_board.is_winner() {
+                    println!("score = {}, draw = {}, turn = {}", final_board.score(*draw), draw, turn + n + 1);
+                    std::process::exit(0)
+                }
             }
         }
     }
