@@ -36,7 +36,33 @@ fn main() {
                 let count = vents.entry((i, y1)).or_insert(0);
                 *count += 1;
             }
-        } 
+        } else {
+            if x1 < x2 {
+                if y1 < y2 {
+                    for (x, y) in (x1..=x2).zip(y1..=y2) {
+                        let count = vents.entry((x, y)).or_insert(0);
+                        *count += 1;
+                    }
+                } else {
+                     for (x, y) in (x1..=x2).zip((y2..=y1).rev()) {
+                        let count = vents.entry((x, y)).or_insert(0);
+                        *count += 1;
+                    }                   
+                }
+            } else {
+                if y1 < y2 {
+                    for (x, y) in ((x2..=x1).rev()).zip(y1..=y2) {
+                        let count = vents.entry((x, y)).or_insert(0);
+                        *count += 1;
+                    }
+                } else {
+                     for (x, y) in ((x2..=x1).rev()).zip((y2..=y1).rev()) {
+                        let count = vents.entry((x, y)).or_insert(0);
+                        *count += 1;
+                    }                   
+                }
+            }
+        }
     }
 
     let mut sum = 0;
