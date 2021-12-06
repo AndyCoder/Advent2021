@@ -15,7 +15,7 @@ fn main() {
         *count += 1;
     }
 
-    let final_state = tick(&counts, 80);
+    let final_state = tick(&counts, 256);
 
     let mut sum = 0;
     for x in final_state.values() {
