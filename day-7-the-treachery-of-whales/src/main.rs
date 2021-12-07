@@ -21,7 +21,8 @@ fn main() {
     for i in min..=max {
         let mut fuel:u32 = 0;
         for n in input.iter() {
-            fuel = fuel + (i32::abs(n - i) as u32);
+            let distance = i32::abs(n - i);
+            fuel = fuel + ((distance * (distance + 1)) / 2) as u32;
         }
         if fuel < least_fuel {
             least_fuel = fuel;
